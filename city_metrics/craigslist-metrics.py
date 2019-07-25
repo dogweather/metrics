@@ -2,8 +2,9 @@
 
 import sys
 
-from selenium import webdriver
+from selenium.webdriver import Chrome
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
 
 topic           = sys.argv[1]
@@ -14,13 +15,15 @@ TOPIC_SLUGS = {
     'instruments':  'msa'
 }
 
-def make_web_driver():
+
+def make_web_driver() -> WebDriver:
     """Instantiate a new automated web browser"""
     options = Options()
     options.add_argument('--headless')
-    return webdriver.Chrome(options=options)
+    return Chrome(options=options)
 
-def get_post_count(driver, subdomain, topic) -> str:
+
+def get_post_count(driver: WebDriver, subdomain: str, topic: str) -> str:
     """Return the number of musician posts in the given city"""
     domain = f'{subdomain}.craigslist.org'
     slug   = TOPIC_SLUGS[topic]
@@ -35,6 +38,7 @@ for subdomain in city_subdomains:
         total_count = get_post_count(driver, subdomain, topic)
     except NoSuchElementException:
         total_count = '0'
+
     print(f'{subdomain}, {total_count}')
 
 driver.close()
