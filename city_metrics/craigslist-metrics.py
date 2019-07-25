@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+
+import sys
+
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options
+
+topic           = sys.argv[1]
+city_subdomains = sys.argv[2:]
+
+TOPIC_SLUGS = {
+    'musicians': 'muc',
+    'instruments':  'msa'
+}
+
+def make_web_driver():
+    """Instantiate a new automated web browser"""
+    options = Options()
+    options.add_argument('--headless')
+    return webdriver.Chrome(options=options)
+
+def get_post_count(driver, subdomain, topic) -> str:
+    """Return the number of musician posts in the given city"""
+    domain = f'{subdomain}.craigslist.org'
+    slug   = TOPIC_SLUGS[topic]
+    driver.get(f'https://{domain}/search/{slug}')
+    return driver.find_element_by_css_selector('span.totalcount').text
+
+
+driver = make_web_driver()
+
+for subdomain in city_subdomains:
+    try:
+        total_count = get_post_count(driver, subdomain, topic)
+    except NoSuchElementException:
+        total_count = '0'
+    print(f'{subdomain}, {total_count}')
+
+driver.close()
