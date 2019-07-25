@@ -7,9 +7,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.options import Options
 
-topic           = sys.argv[1]
-city_subdomains = sys.argv[2:]
-
 TOPIC_SLUGS = {
     'musicians': 'muc',
     'instruments':  'msa'
@@ -31,7 +28,9 @@ def get_post_count(driver: WebDriver, subdomain: str, topic: str) -> str:
     return driver.find_element_by_css_selector('span.totalcount').text
 
 
-driver = make_web_driver()
+topic           = sys.argv[1]
+city_subdomains = sys.argv[2:]
+driver          = make_web_driver()
 
 for subdomain in city_subdomains:
     try:
