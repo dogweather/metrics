@@ -21,7 +21,7 @@ def make_web_driver() -> WebDriver:
 
 
 def get_post_count(driver: WebDriver, subdomain: str, topic: str) -> str:
-    """Return the number of 'musicians' or 'music instruments for sale' posts in the given city"""
+    """Return the number of posts in the given city and topic name"""
     domain = f'{subdomain}.craigslist.org'
     slug   = TOPIC_SLUGS[topic]
     driver.get(f'https://{domain}/search/{slug}')
